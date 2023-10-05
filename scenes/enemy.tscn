@@ -1,19 +1,19 @@
 [gd_scene load_steps=10 format=3 uid="uid://dl2sd7l5a6ro0"]
 
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_3l8el"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_p1t2n"]
 [ext_resource type="Texture2D" uid="uid://daivnseqe3e4e" path="res://textures/enemy.png" id="2_bxx3y"]
-[ext_resource type="PackedScene" uid="uid://d3r0rply8mfj" path="res://scenes/damage system/hurtbox.tscn" id="4_04ya3"]
-[ext_resource type="PackedScene" uid="uid://bdy43ueb6q1kq" path="res://scenes/damage system/health_component.tscn" id="5_0tadx"]
+[ext_resource type="PackedScene" uid="uid://d3r0rply8mfj" path="res://scenes/damage system/hurtbox.tscn" id="3_y5yg1"]
+[ext_resource type="PackedScene" uid="uid://bdy43ueb6q1kq" path="res://scenes/damage system/health_component.tscn" id="4_2vy5t"]
 [ext_resource type="Texture2D" uid="uid://dxy8056vy1dvi" path="res://textures/sword.png" id="6_c7638"]
+[ext_resource type="PackedScene" uid="uid://11yl63tyw2c4" path="res://scenes/damage system/damage_area.tscn" id="7_xmsir"]
 [ext_resource type="Script" path="res://scripts/sword.gd" id="7_xpvgv"]
-[ext_resource type="PackedScene" uid="uid://11yl63tyw2c4" path="res://scenes/damage system/damage_area.tscn" id="8_a0g6e"]
 [ext_resource type="Resource" uid="uid://x7i12uqjll5b" path="res://resources/sword_damage.tres" id="9_ex3df"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ufbo"]
 size = Vector2(32, 64)
 
 [node name="Enemy" type="CharacterBody2D"]
-script = ExtResource("1_3l8el")
+script = ExtResource("1_p1t2n")
 speed = 150.0
 metadata/_edit_group_ = true
 
@@ -24,10 +24,10 @@ region_rect = Rect2(0, 0, 64, 64)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_7ufbo")
 
-[node name="HurtBox" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("4_04ya3")]
+[node name="HurtBox" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("3_y5yg1")]
 health_component = NodePath("../HealthComponent")
 
-[node name="HealthComponent" parent="." instance=ExtResource("5_0tadx")]
+[node name="HealthComponent" parent="." instance=ExtResource("4_2vy5t")]
 max_hitpoints = 50
 
 [node name="Weapon" type="Node2D" parent="."]
@@ -37,7 +37,9 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("6_c7638")
 script = ExtResource("7_xpvgv")
 
-[node name="DamageArea" parent="Weapon/Sword" node_paths=PackedStringArray("exclude_hurtbox") instance=ExtResource("8_a0g6e")]
+[node name="DamageArea" parent="Weapon/Sword" node_paths=PackedStringArray("exclude_hurtbox") instance=ExtResource("7_xmsir")]
 position = Vector2(20, 0)
 damage = ExtResource("9_ex3df")
 exclude_hurtbox = NodePath("../../../HurtBox")
+
+[connection signal="report_damage" from="HealthComponent" to="." method="take_damage"]

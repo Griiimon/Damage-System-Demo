@@ -1,10 +1,12 @@
 extends Node
 class_name HealthComponent
 
+signal report_damage
+
+
 @export var max_hitpoints: int= 100
 @export var invulnerable: bool= false
 @export var has_custom_damage_logic: bool= false
-@export var report_damage: bool= true
 
 @export_category("Damage Types")
 
@@ -19,8 +21,6 @@ func _ready():
 	if has_custom_damage_logic:
 		assert(get_parent().has_method("custom_damage_logic"), get_parent().name + " is missing custom_damage_logic() function")
 
-	if report_damage:
-		assert(get_parent().has_method("take_damage"), get_parent().name + " is missing take_damage() function")
 
 	
 func receive_damage(damage: Damage):
@@ -40,13 +40,9 @@ func receive_damage(damage: Damage):
 	hitpoints-= final_damage
 	hitpoints= max(hitpoints, 0)
 	
-	if  final_damage == 0: return
+	if final_damage == 0: return
 	
-	if report_damage:
-		get_parent().take_damage(damage)
-
-	if get_parent().has_method("hitpoints_changed"):
-		get_parent().hitpoints_changed(hitpoints)
+	report_damage.emit(damage, hitpoints)
 	
 	if hitpoints <= 0:
 		if get_parent().has_method("die"):

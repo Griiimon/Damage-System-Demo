@@ -12,7 +12,7 @@ func _ready():
 	if weapon_node.get_child_count() > 0:
 		weapon_node.get_child(0).hide()
 
-func take_damage(_damage: Damage):
+func take_damage(_damage: Damage, hitpoints: int):
 	play_damage_effect()
 
 func play_damage_effect():

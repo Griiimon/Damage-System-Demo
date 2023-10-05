@@ -20,6 +20,10 @@ func custom_damage_logic(damage: Damage):
 		return damage.value / 2
 	return damage.value
 
+func take_damage(_damage: Damage, hitpoints: int):
+	super(_damage, hitpoints)
+	hitpoints_changed(hitpoints)
+
 func hitpoints_changed(hp: int):
 	hitpoints_label.text= "HP: " + str(hp)
 
