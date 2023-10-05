@@ -1,0 +1,72 @@
+[gd_scene load_steps=12 format=3 uid="uid://c11nvk3aypkk2"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_6ngef"]
+[ext_resource type="PackedScene" uid="uid://btma2q2c2q1n8" path="res://scenes/player.tscn" id="2_3gi25"]
+[ext_resource type="Texture2D" uid="uid://v6iwbm2pwhkx" path="res://textures/wall.png" id="2_ur3rs"]
+[ext_resource type="PackedScene" uid="uid://6qk8es0eydn5" path="res://scenes/spikes.tscn" id="3_03j5n"]
+[ext_resource type="PackedScene" uid="uid://dl2sd7l5a6ro0" path="res://scenes/enemy.tscn" id="5_3s6mk"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="6_p2isk"]
+[ext_resource type="PackedScene" uid="uid://3q82sxfywuja" path="res://scenes/crate.tscn" id="7_16kc8"]
+[ext_resource type="PackedScene" uid="uid://bue7uq7rp826s" path="res://scenes/armor_pickup.tscn" id="7_18h34"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5p00l"]
+texture = ExtResource("2_ur3rs")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_0fmra"]
+scenes/1/scene = ExtResource("3_03j5n")
+
+[sub_resource type="TileSet" id="TileSet_leken"]
+tile_size = Vector2i(64, 64)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_5p00l")
+sources/1 = SubResource("TileSetScenesCollectionSource_0fmra")
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_6ngef")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_leken")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 524289, 0, 0, 524290, 0, 0, 524291, 0, 0, 524292, 0, 0, 524293, 0, 0, 524294, 0, 0, 524295, 0, 0, 524296, 0, 0, 524297, 0, 0, 9, 0, 0, 8, 0, 0, 7, 0, 0, 6, 0, 0, 5, 0, 0, 4, 0, 0, 3, 0, 0, 2, 0, 0, 1, 0, 0, 458755, 1, 65536, 458761, 0, 0, 393225, 0, 0, 327689, 0, 0, 262153, 0, 0, 196617, 0, 0, 131081, 0, 0, 65545, 0, 0)
+
+[node name="Player" parent="." instance=ExtResource("2_3gi25")]
+position = Vector2(304, 204)
+
+[node name="Enemy" parent="." instance=ExtResource("5_3s6mk")]
+position = Vector2(428, 200)
+motion_mode = 1
+script = ExtResource("6_p2isk")
+speed = 50.0
+
+[node name="Crate" parent="." instance=ExtResource("7_16kc8")]
+
+[node name="ArmorPickup" parent="." instance=ExtResource("7_18h34")]
+position = Vector2(366, 322)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DescriptionLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 27
+text = "Use Arrow Keys to move
+Spacebar to attack
+Tab to make Enemy attack
+
+
+Wear Armor to take less Melee Damage
+The Crate doesn't take Melee Damage
+but can be damaged by Spikes"
+horizontal_alignment = 2

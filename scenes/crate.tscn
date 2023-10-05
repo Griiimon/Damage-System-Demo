@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://3q82sxfywuja"]
+
+[ext_resource type="Texture2D" uid="uid://3d4n0yxt4afv" path="res://textures/crate.png" id="1_8i6tj"]
+[ext_resource type="Script" path="res://scripts/hurtbox.gd" id="2_8jhpc"]
+[ext_resource type="PackedScene" uid="uid://bdy43ueb6q1kq" path="res://scenes/damage system/health_component.tscn" id="3_pmi1t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_scv7j"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hg5s6"]
+resource_local_to_scene = true
+size = Vector2(32, 32)
+
+[node name="Crate" type="RigidBody2D"]
+position = Vector2(220, 290)
+collision_layer = 2
+gravity_scale = 0.0
+linear_damp_mode = 1
+linear_damp = 10.0
+angular_damp_mode = 1
+angular_damp = 10.0
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_8i6tj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_scv7j")
+
+[node name="HurtBox" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+script = ExtResource("2_8jhpc")
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("RectangleShape2D_hg5s6")
+debug_color = Color(0, 0.6, 0.0313726, 0.419608)
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_pmi1t")]
+max_hitpoints = 1
+report_damage = false
+whitelist = Array[int]([2])

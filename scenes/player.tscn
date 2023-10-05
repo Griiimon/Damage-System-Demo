@@ -1,0 +1,63 @@
+[gd_scene load_steps=11 format=3 uid="uid://btma2q2c2q1n8"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_3bvxi"]
+[ext_resource type="Texture2D" uid="uid://ckramopca2o1h" path="res://textures/player.png" id="2_j5hce"]
+[ext_resource type="Texture2D" uid="uid://bpvxuq0bbht4b" path="res://textures/armor.png" id="3_r3we5"]
+[ext_resource type="PackedScene" uid="uid://d3r0rply8mfj" path="res://scenes/damage system/hurtbox.tscn" id="4_grodx"]
+[ext_resource type="PackedScene" uid="uid://bdy43ueb6q1kq" path="res://scenes/damage system/health_component.tscn" id="5_do026"]
+[ext_resource type="Texture2D" uid="uid://dxy8056vy1dvi" path="res://textures/sword.png" id="6_nnpy1"]
+[ext_resource type="Script" path="res://scripts/sword.gd" id="7_ynt7y"]
+[ext_resource type="PackedScene" uid="uid://11yl63tyw2c4" path="res://scenes/damage system/damage_area.tscn" id="8_ea477"]
+[ext_resource type="Resource" uid="uid://x7i12uqjll5b" path="res://resources/sword_damage.tres" id="9_lnc4p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ufbo"]
+size = Vector2(32, 64)
+
+[node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_3bvxi")
+speed = 150.0
+metadata/_edit_group_ = true
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_j5hce")
+hframes = 2
+region_rect = Rect2(0, 0, 64, 64)
+
+[node name="SpriteArmor" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -4)
+texture = ExtResource("3_r3we5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7ufbo")
+
+[node name="HurtBox" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("4_grodx")]
+health_component = NodePath("../HealthComponent")
+
+[node name="HealthComponent" parent="." instance=ExtResource("5_do026")]
+has_custom_damage_logic = true
+
+[node name="Weapon" type="Node2D" parent="."]
+
+[node name="Sword" type="Sprite2D" parent="Weapon"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_nnpy1")
+script = ExtResource("7_ynt7y")
+
+[node name="DamageArea" parent="Weapon/Sword" node_paths=PackedStringArray("exclude_hurtbox") instance=ExtResource("8_ea477")]
+position = Vector2(20, 0)
+damage = ExtResource("9_lnc4p")
+exclude_hurtbox = NodePath("../../../HurtBox")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HitpointsLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -58.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 20
+text = "HP: 100"

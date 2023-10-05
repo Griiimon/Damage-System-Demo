@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://6qk8es0eydn5"]
+
+[ext_resource type="Texture2D" uid="uid://j6ntqttwmc7p" path="res://textures/spikes.png" id="1_1hkd8"]
+[ext_resource type="Script" path="res://scripts/damage_area.gd" id="2_7wdy7"]
+[ext_resource type="Resource" uid="uid://dd7u5moh7w505" path="res://resources/spikes_damage.tres" id="3_2vtkp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j2pnu"]
+resource_local_to_scene = true
+size = Vector2(50, 25)
+
+[node name="Spikes" type="Sprite2D"]
+texture = ExtResource("1_1hkd8")
+
+[node name="DamageArea" type="Area2D" parent="."]
+position = Vector2(0, 17)
+collision_layer = 0
+collision_mask = 0
+monitorable = false
+script = ExtResource("2_7wdy7")
+damage = ExtResource("3_2vtkp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea"]
+shape = SubResource("RectangleShape2D_j2pnu")
+debug_color = Color(0.596078, 0.223529, 0.231373, 0.419608)
+
+[connection signal="area_entered" from="DamageArea" to="DamageArea" method="_on_area_entered" flags=18]
